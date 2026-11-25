@@ -1,2 +1,16 @@
 node_modules/
 *.tgz
+
+# Python y datos del taller (nunca se versionan)
+.venv/
+venv/
+__pycache__/
+.pytest_cache/
+data/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite
+*.sqlite3
+*.log
+.env

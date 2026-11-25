@@ -12,7 +12,7 @@ try:
             urllib.request.urlopen(base, timeout=1).close(); break
         except OSError: time.sleep(.1)
     with sync_playwright() as p:
-        browser = p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH','/usr/bin/chromium'), headless=True, args=['--no-sandbox'])
+        browser = p.chromium.launch(executable_path=os.environ.get('CHROMIUM_PATH') or ('/usr/bin/chromium' if Path('/usr/bin/chromium').exists() else None), headless=True, args=['--no-sandbox'])
         page = browser.new_page(viewport={'width':1440,'height':960}, reduced_motion='reduce')
         errors=[]
         page.on('pageerror', lambda e:errors.append(str(e)))
