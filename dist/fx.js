@@ -3,6 +3,7 @@
   const root = document.documentElement;
   const theme = document.getElementById('theme-toggle');
   const layout = document.getElementById('layout-toggle');
+  const density = document.getElementById('density-toggle');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const gsap = window.gsap;
   let pageAnimation, dialogAnimation;
@@ -26,12 +27,14 @@
     document.getElementById('nav-more')?.setAttribute('aria-expanded','false');
     document.getElementById('nav-secondary')?.classList.remove('open');
   });
+  density.value=root.dataset.density||'compact';
+  density.addEventListener('change',()=>{root.dataset.density=density.value;remember('tintastock-density',density.value)});
   sync();
   const clear = (targets) => { if (gsap && targets.length) gsap.set(targets, {clearProps:'opacity,transform'}); };
   function animatePage() {
     if (!gsap || motion.matches || document.hidden) return;
     pageAnimation?.kill();
-    const groups = [...document.querySelectorAll('#page .page-head, #page .metric, #page .hero, #page .grid > .panel, #page .card-grid > .panel, #page > .panel, #page .label-layout > .panel')].slice(0,12);
+    const groups = [...document.querySelectorAll('#page .page-head, #page .metric, #page .hero, #page .stock-surface, #page .context-panel, #page .grid > .panel, #page .card-grid > .panel, #page > .panel, #page .label-layout > .panel')].slice(0,12);
     if (!groups.length) return;
     pageAnimation=gsap.timeline();
     pageAnimation.fromTo(groups,{opacity:.65,y:10},{opacity:1,y:0,duration:.3,stagger:.025,ease:'power2.out',clearProps:'opacity,transform'});

@@ -31,7 +31,7 @@ def create_app(database_url=None):
         yield
         engine.dispose()
 
-    app=FastAPI(title='TintaStock · API de almacén',version='0.4.0',lifespan=lifespan)
+    app=FastAPI(title='TintaStock · API de almacén',version='0.5.0',lifespan=lifespan)
 
     @app.middleware('http')
     async def security_headers(request,call_next):

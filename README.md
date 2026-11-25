@@ -1,6 +1,6 @@
 # almacen — TintaStock · Gráfica Ali
 
-Sistema de almacén para imprentas gráficas con interfaz CMYK, escáner y etiquetas. **Versión 0.4: backend Python con FastAPI, SQLAlchemy y SQLite, inicio de sesión y roles**; frontend HTML, CSS, JavaScript y GSAP. La base de datos ahora se comparte entre todos los equipos conectados al mismo servidor. El proyecto del taller `grafica_2` permanece independiente y no se modifica.
+Sistema de almacén para imprentas gráficas con interfaz CMYK, escáner y etiquetas. **Versión 0.5: backend Python con FastAPI, SQLAlchemy y SQLite, inicio de sesión y roles**; frontend HTML, CSS, JavaScript y GSAP. La base de datos ahora se comparte entre todos los equipos conectados al mismo servidor. El proyecto del taller `grafica_2` permanece independiente y no se modifica.
 
 ## Ejecutar el sistema real (Python)
 
@@ -40,6 +40,12 @@ En el primer arranque se crea automáticamente `data/almacen.db`, inicialmente v
 Los equipos de la misma red de confianza pueden compartir datos iniciando Uvicorn con `--host 0.0.0.0 --port 8001`, y abriendo `http://IP_DEL_SERVIDOR:8001` desde cada dispositivo. El equipo servidor debe permanecer encendido; la interfaz consulta cambios cada 10 segundos cuando está visible y no hay un formulario abierto. Una versión obsoleta de los datos no puede sobrescribir nuevas existencias; se pide reabrir el formulario y confirmar de nuevo.
 
 La cámara requiere HTTPS (excepto `localhost` en el propio equipo). Para usar la cámara desde el celular, configura el servidor detrás de un proxy HTTPS con un certificado confiable para el teléfono. En HTTP se puede usar búsqueda manual o un lector de códigos USB/Bluetooth que escriba el texto. Esta versión exige iniciar sesión. Usa HTTPS con un certificado confiable para proteger credenciales y datos cuando se conecten otros dispositivos. Para acceso desde Internet todavía se necesita una instalación HTTPS segura y gestión de infraestructura; no publiques directamente el puerto de desarrollo.
+
+## Mesa de trabajo — diseño 0.5
+
+La pantalla inicial integra búsqueda, indicadores compactos, inventario y alertas, en vez de un dashboard separado. Las acciones Entrada/Salida (o Retirar/Devolver si eres de Producción) están disponibles directamente en la fila del material. Después de identificarlo, se abre una operación con material y tipo preseleccionados: escribe la cantidad y confirma. La orden y la nota son opcionales.
+
+Se puede alternar entre **Lista** y **Tarjetas** (columnas Disponible, Stock bajo y Agotado) y entre las densidades Compacta, Cómoda y Detallada. Los filtros quedan plegados hasta necesitarlos; los chips filtran estados con un toque, y Ctrl+K enfoca la búsqueda. Escribe o introduce un código con un lector y pulsa Enter para abrir la ficha. En móvil las filas se convierten en tarjetas cortas con las acciones esenciales.
 
 ## Funcionalidades
 
@@ -95,6 +101,6 @@ Para los scripts de navegador, se puede configurar `CHROMIUM_PATH` si se usa Chr
 
 ## Demostración estática (opcional)
 
-`npm start` conserva la demostración estática sin inicio de sesión real en `http://localhost:8080` con datos locales y sin sincronización, útil para maquetas. El servidor Python de puerto 8001 es el sistema centralizado. La vista web estática publicada en Sites no ejecuta Python ni se conecta a la base local del taller. Para reconstruir las librerías JS: `npm ci && npm run build && npm run check`.
+`npm start` conserva la demostración estática sin inicio de sesión real en `http://localhost:8080` con datos locales y sin sincronización, útil para maquetas. El servidor Python de puerto 8001 es el sistema centralizado. La vista web estática publicada en Sites muestra la interfaz de demostración sin autenticación real y no se conecta a la base local del taller. Para reconstruir las librerías JS: `npm ci && npm run build && npm run check`.
 
 Las librerías JsBarcode, html5-qrcode, qrcode y GSAP se distribuyen según sus licencias en `licenses/`.
