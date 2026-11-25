@@ -41,4 +41,13 @@ El frontend de modo servidor no carga ni guarda el inventario en `localStorage`;
 
 ## Siguiente integración
 
-La tabla de órdenes de almacén reserva `workshop_order_id` para un vínculo futuro con el identificador real de pedido del taller. No se vinculan pedidos automáticamente ni se comparten archivos SQLite entre procesos. La integración recomendada es consultar `/api/orders/` del taller, seleccionar un pedido y guardar su ID explícito en el almacén, con una capa de autenticación y permisos. PostgreSQL se podrá evaluar cuando haya mayor concurrencia, pero hoy las transacciones SQLite son apropiadas para el piloto. La autenticación y la conexión HTTPS del teléfono se implementarán según el entorno real de instalación.
+La tabla de órdenes de almacén reserva `workshop_order_id` para un vínculo futuro con el identificador real de pedido del taller. No se vinculan pedidos automáticamente ni se comparten archivos SQLite entre procesos. La integración recomendada es consultar `/api/orders/` del taller, seleccionar un pedido y guardar su ID explícito en el almacén, con una capa de autenticación y permisos. PostgreSQL se podrá evaluar cuando haya mayor concurrencia, pero hoy las transacciones SQLite son apropiadas para el piloto. La autenticación por cuentas y roles ya está implementada en 0.4. La conexión HTTPS del teléfono se configurará según el entorno real de instalación.
+
+
+## Versión 0.4: usuarios y autorización
+
+- Tablas independientes `inventory_users` y `inventory_user_sessions`; se crean al actualizar sin reemplazar el inventario existente.
+- Contraseñas con scrypt y sal aleatoria; sesión opaca aleatoria con hash almacenado, cookie HttpOnly, SameSite=Strict, Secure cuando se usa HTTPS; caducidad de 12 horas. No se guardan credenciales en localStorage. Las escrituras requieren un encabezado propio de la aplicación y no se habilita CORS de terceros.
+- Primera administración creada localmente con `python -m sistema_almacen.users --ensure`; no hay contraseña de fábrica ni endpoint público de registro. El gestor de usuarios se restringe a administración, y desactivar o cambiar una cuenta invalida sus sesiones.
+- La autorización se aplica en las rutas Python. Administración controla todo, almacén opera existencias y etiquetas, producción registra solo retiros/devoluciones, gerencia consulta costos e informes. Los operarios reciben cifras de costo enmascaradas; la edición de material por almacén conserva el costo real. Se registra el usuario de sesión en movimientos nuevos.
+- La interfaz usa un acceso simple, menú de cuenta y pantallas según rol; se conservan los temas claros/oscuros y el modo móvil. Los ajustes con nota opcional reemplazan la necesidad de registrar desperdicios como parte del flujo normal. La integración de las cuentas con el sistema de producción `grafica_2` sigue pendiente.

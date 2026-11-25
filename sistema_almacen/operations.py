@@ -86,16 +86,16 @@ def make_product(v, key=None):
                      cost=cents(v.cost), location=v.location, supplier=v.supplier)
 
 
-def create_product(db, v:s.ProductInput):
+def create_product(db, v:s.ProductInput, operator="Operador"):
     unique_code(db,m.Product,v.code)
     p=make_product(v)
     db.add(p)
     db.flush()
     if p.stock:
-        record(db,p,'entrada',p.stock,'Stock inicial')
+        record(db,p,'entrada',p.stock,'Stock inicial',operator=operator)
 
 
-def edit_product(db,key,v:s.ProductInput):
+def edit_product(db,key,v:s.ProductInput,allow_cost=True):
     p=get(db,m.Product,key)
     unique_code(db,m.Product,v.code,key)
     if p.stock!=milli(v.stock):
@@ -104,7 +104,8 @@ def edit_product(db,key,v:s.ProductInput):
         raise HTTPException(409,'No se puede cambiar la unidad de un material con stock o historial.')
     for k in ('code','name','category','detail','unit','location','supplier'):
         setattr(p,k,getattr(v,k))
-    p.minimum=milli(v.min);p.cost=cents(v.cost)
+    p.minimum=milli(v.min)
+    if allow_cost: p.cost=cents(v.cost)
 
 
 def move(db,v:s.MovementInput):
@@ -132,15 +133,15 @@ def move(db,v:s.MovementInput):
     record(db,p,v.type,q,note,order,v.operator)
 
 
-def remnant(db,key,v:s.RemnantInput):
+def remnant(db,key,v:s.RemnantInput,operator="Operador"):
     p=get(db,m.Product,key);unique_code(db,m.Product,v.code)
     q=milli(v.qty)
     if q<=0 or q>p.stock: raise HTTPException(409,'Cantidad no disponible.')
     new=m.Product(id=str(uuid4()),code=v.code,name=(p.name[:108]+' · Sobrante'),category=p.category,
                   detail=v.detail,unit=p.unit,stock=q,minimum=0,cost=p.cost,location=v.location,supplier=p.supplier)
     p.stock-=q;db.add(new);db.flush()
-    record(db,p,'ajuste',p.stock,f'Separación {quantity(q):g} {p.unit} hacia {new.code}')
-    record(db,new,'entrada',q,f'Sobrante de {p.code}')
+    record(db,p,'ajuste',p.stock,f'Separación {quantity(q):g} {p.unit} hacia {new.code}',operator=operator)
+    record(db,new,'entrada',q,f'Sobrante de {p.code}',operator=operator)
 
 
 def create_order(db,v:s.OrderInput):

@@ -64,3 +64,20 @@ class Movement(Base):
     note: Mapped[str] = mapped_column(Text, default='')
     order: Mapped[str] = mapped_column(String(80), default='', index=True)
     operator: Mapped[str] = mapped_column(String(60), default='Operador')
+
+
+class User(Base):
+    __tablename__ = 'inventory_users'
+    id: Mapped[str] = mapped_column(String(80), primary_key=True)
+    username: Mapped[str] = mapped_column(String(40, collation='NOCASE'), unique=True, nullable=False)
+    display_name: Mapped[str] = mapped_column(String(120), nullable=False)
+    role: Mapped[str] = mapped_column(String(24), nullable=False)
+    password_hash: Mapped[str] = mapped_column(String(250), nullable=False)
+    active: Mapped[bool] = mapped_column(default=True, nullable=False)
+
+
+class UserSession(Base):
+    __tablename__ = 'inventory_user_sessions'
+    token_hash: Mapped[str] = mapped_column(String(64), primary_key=True)
+    user_id: Mapped[str] = mapped_column(ForeignKey('inventory_users.id', ondelete='CASCADE'), index=True)
+    expires_at: Mapped[int] = mapped_column(Integer, index=True, nullable=False)
