@@ -1,0 +1,4 @@
+GSAP 3.15.1 — GreenSock
+Official project: https://gsap.com/
+License terms: https://gsap.com/standard-license/
+The distributed minified file retains its original copyright and license notice.

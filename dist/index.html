@@ -1,1 +1,56 @@
-<!doctype html><html lang="es"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover"><meta name="theme-color" content="#0a2437"><title>TintaStock | Almacén gráfico</title><meta name="description" content="Control de materiales, movimientos y etiquetas para imprentas"><link rel="stylesheet" href="style.css"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon.svg" type="image/svg+xml"></head><body><aside class="sidebar" id="sidebar"><div class="brand"><span class="logomark">T<span>●</span></span><div><strong>TintaStock<span>.</span></strong><small>ALMACÉN GRÁFICO</small></div></div><div class="workspace"><div class="workspace-icon">IG</div><div><b>Mi imprenta</b><small>Almacén principal</small></div></div><div class="nav-label">OPERACIONES</div><nav id="nav"></nav><div class="side-bottom"><div class="demo-indicator"><i></i> Modo de prueba</div><small>Versión 0.1 · Datos locales</small></div></aside><main><header class="top"><button class="mobile-menu icon-button" id="menu" aria-label="Menú">☰</button><div class="breadcrumb">Almacén <span>/</span> <b id="crumb">Resumen</b></div><div class="top-right"><span class="today" id="today"></span><button class="button secondary top-scan" data-action="scan">▥ <span>Escanear</span></button><div class="avatar" title="Operador de prueba">OP</div></div></header><section id="page" class="page"></section><footer> TintaStock <span>·</span> Sistema de gestión de almacén gráfico <span>·</span> Piloto</footer></main><div class="overlay" id="overlay" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header><div><small id="modal-kicker">TINTASTOCK</small><h2 id="modal-title"></h2></div><button class="icon-button" id="close" aria-label="Cerrar">×</button></header><div id="modal-body"></div></section></div><div id="toast" role="status"></div><div id="print-sheet"></div><input type="file" id="import-file" accept="application/json,.json" hidden><script src="vendor/barcode.js"></script><script src="vendor/scanner.js"></script><script src="vendor/qrcode.js"></script><script src="app.js"></script></body></html>
+<!doctype html>
+<html lang="es" data-theme="light" data-layout="comfort">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#18191b">
+  <title>TintaStock | Gráfica Ali · Almacén</title>
+  <meta name="description" content="Control de materiales, movimientos y etiquetas para imprentas">
+  <script>
+    try {
+      const theme = localStorage.getItem('tintastock-theme');
+      const layout = localStorage.getItem('tintastock-layout');
+      if (theme === 'dark') document.documentElement.dataset.theme = 'dark';
+      if (layout === 'classic') document.documentElement.dataset.layout = 'classic';
+    } catch {}
+  </script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="theme.css">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+</head>
+<body>
+  <a class="skip-link" href="#main">Ir al contenido</a>
+  <aside class="sidebar" id="sidebar" aria-label="Navegación principal">
+    <button type="button" class="drawer-close icon-button" id="drawer-close" aria-label="Cerrar menú"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button>
+    <button class="brand" data-go="home" aria-label="Gráfica Ali, inicio del almacén">
+      <span class="brand-mark" aria-hidden="true"><i></i><i></i><i></i><i></i></span>
+      <span><strong>gráfica<span class="brand-ali">ali<span class="brand-period">.</span></span></strong><small>TINTASTOCK · ALMACÉN</small></span>
+    </button>
+    <div class="workspace"><div class="workspace-icon">GA</div><div><b>Almacén principal</b><small>Gestión de materiales</small></div></div>
+    <div class="nav-label">OPERACIONES</div>
+    <nav id="nav" aria-label="Módulos del almacén"></nav>
+    <div class="side-bottom"><div class="ink-swatches" aria-hidden="true"><i>C</i><i>M</i><i>Y</i><i>K</i></div><div class="demo-indicator"><i></i> Modo de prueba</div><small>Versión 0.2 · Datos locales</small></div>
+  </aside>
+  <div id="drawer-backdrop" class="drawer-backdrop" hidden></div>
+  <main id="main" tabindex="-1">
+    <header class="top">
+      <button class="mobile-menu icon-button" id="menu" aria-label="Abrir menú" aria-controls="sidebar" aria-expanded="false"><svg viewBox="0 0 24 24" width="23" height="23" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16"/></svg></button>
+      <div class="breadcrumb"><span class="crumb-root">Almacén</span><span>/</span><b id="crumb">Resumen</b></div>
+      <div class="top-right">
+        <span class="local-status"><i></i> Datos locales</span>
+        <span class="today" id="today"></span>
+        <button type="button" id="layout-toggle" class="utility-button" aria-pressed="true" title="Cambiar distribución"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 9v12"/></svg><span id="layout-label">Vista cómoda</span></button>
+        <button type="button" id="theme-toggle" class="theme-toggle" role="switch" aria-checked="false" aria-label="Modo nocturno"><span class="theme-track" aria-hidden="true"><span class="theme-thumb"><svg class="sun" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M2 12h2m16 0h2M5 5l2 2m10 10 2 2M5 19l2-2M17 7l2-2"/></svg><svg class="moon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M21 13A9 9 0 1 1 11 3a7 7 0 0 0 10 10z"/></svg></span></span><span class="theme-label">Modo nocturno</span></button>
+        <button class="button top-scan" data-action="scan" aria-label="Escanear material"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M3 9V3h6M15 3h6v6M21 15v6h-6M9 21H3v-6M7 7v10M11 7v10M15 7v10M17 7v10"/></svg><span>Escanear</span></button>
+        <div class="avatar" title="Operador de prueba">OP</div>
+      </div>
+    </header>
+    <section id="page" class="page"></section>
+    <footer>TintaStock <span>·</span> Gráfica Ali <span>·</span> Sistema piloto de almacén</footer>
+  </main>
+  <div class="overlay" id="overlay" hidden><section class="modal" role="dialog" aria-modal="true" aria-labelledby="modal-title"><header><div><small id="modal-kicker">GRÁFICA ALI · TINTASTOCK</small><h2 id="modal-title"></h2></div><button class="icon-button" id="close" aria-label="Cerrar"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="m6 6 12 12M18 6 6 18"/></svg></button></header><div id="modal-body"></div></section></div>
+  <div id="toast" role="status" aria-live="polite"></div><div id="print-sheet"></div><input type="file" id="import-file" accept="application/json,.json" hidden>
+  <script src="vendor/barcode.js"></script><script src="vendor/scanner.js"></script><script src="vendor/qrcode.js"></script><script src="vendor/gsap.js"></script><script src="app.js"></script><script src="fx.js"></script>
+</body>
+</html>

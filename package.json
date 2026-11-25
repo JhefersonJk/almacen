@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "gsap": "^3.15.1",
     "html5-qrcode": "^2.3.8",
     "jsbarcode": "^3.12.3",
     "qrcode": "^1.5.4"
@@ -8,12 +9,12 @@
     "esbuild": "^0.28.2"
   },
   "name": "tinta-stock",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "private": true,
   "description": "Sistema de almacén para imprentas gráficas",
   "scripts": {
     "start": "node scripts/serve.mjs",
     "build": "node scripts/build-vendor.mjs",
-    "check": "node --check dist/app.js && node --check dist/sw.js && node --check scripts/serve.mjs && node --check scripts/build-vendor.mjs"
+    "check": "node --check dist/app.js && node --check dist/sw.js && node --check scripts/serve.mjs && node --check scripts/build-vendor.mjs && node --check dist/fx.js"
   }
 }

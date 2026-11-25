@@ -1,6 +1,8 @@
 # almacen — TintaStock
 
-Sistema piloto de gestión de almacén para imprentas gráficas, adaptable a computadora y celular. Interfaz en español y moneda de ejemplo en bolivianos (Bs).
+Sistema piloto de gestión de almacén para imprentas gráficas, adaptable a computadora y celular. Interfaz en español, identidad CMYK de Gráfica Ali y moneda de ejemplo en bolivianos (Bs).
+
+Versión 0.2: modo claro/nocturno neón, vista cómoda/clásica, inventario móvil en tarjetas, búsqueda sin tildes y animaciones locales GSAP. [Dirección visual y skills](docs/design.md).
 
 ## Funcionalidades
 
@@ -36,7 +38,8 @@ npm run check
 | Archivo | Propósito |
 |---|---|
 | `dist/index.html` | Estructura de la interfaz |
-| `dist/style.css` | Diseño, adaptación móvil y estilos de impresión |
+| `dist/style.css`, `dist/theme.css` | Diseño, paleta CMYK, temas, adaptación móvil e impresión |
+| `dist/fx.js` | Preferencias visuales y animaciones GSAP |
 | `dist/app.js` | Lógica del inventario, escáner, etiquetas y movimientos |
 | `dist/manifest.webmanifest`, `dist/sw.js` | Instalación y caché PWA |
 | `dist/vendor/` | Librerías incluidas para escanear y generar códigos |
@@ -59,4 +62,8 @@ Esta es una versión de demostración. Los datos se guardan con `localStorage` e
 
 Siguiente etapa: almacenamiento centralizado, autenticación y roles, trazabilidad por lotes y rollos, reservas, compras y pruebas con cámaras físicas y lectores de producción.
 
-Las librerías JsBarcode, html5-qrcode y qrcode se distribuyen según sus licencias de terceros.
+Las librerías JsBarcode, html5-qrcode, qrcode y GSAP se distribuyen según sus licencias de terceros.
+
+## Pruebas de navegador
+
+Con Python y Playwright instalados, ejecuta `python tests/browser-smoke.py` (configura `CHROMIUM_PATH` si Chromium está en otra ruta). La prueba usa datos aislados y no modifica inventario real.
